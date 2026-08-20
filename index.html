@@ -1,0 +1,1143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gnexoai — Every AI. All in one place.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FFFFFF;
+    --bg-alt:#F5F5F7;
+    --bg-dark:#0F0F11;
+    --text:#1D1D1F;
+    --text-sub:#6E6E73;
+    --line:#E5E5E7;
+    --blue:#0071E3;
+    --blue-hover:#0077ED;
+    --pink:#FF375F;
+    --orange:#FF9F0A;
+    --purple:#BF5AF2;
+    --green:#30D158;
+    --cyan:#40C8E0;
+    --yellow:#FFD60A;
+    --indigo:#5E5CE6;
+    --radius-lg:22px;
+    --radius-md:16px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;background:var(--bg);color:var(--text);
+    font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    letter-spacing:-0.01em;
+    line-height:1.5;
+  }
+  a{text-decoration:none;color:inherit;}
+  img,svg{display:block;}
+  button{font-family:inherit;}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 24px;}
+  section{padding:100px 0;}
+  h1,h2,h3{margin:0;font-weight:800;letter-spacing:-0.03em;}
+  p{margin:0;}
+
+  /* ANNOUNCEMENT BAR */
+  .announce{
+    background:linear-gradient(90deg, var(--pink), var(--purple) 50%, var(--blue));
+    color:#fff;text-align:center;font-size:13px;font-weight:600;
+    padding:9px 20px;
+  }
+  .announce a{text-decoration:underline;text-underline-offset:2px;}
+
+  /* NAV */
+  header{
+    position:sticky;top:0;z-index:100;
+    background:rgba(255,255,255,0.82);
+    backdrop-filter:saturate(180%) blur(20px);
+    border-bottom:1px solid var(--line);
+  }
+  nav{
+    max-width:1180px;margin:0 auto;padding:0 24px;
+    height:60px;display:flex;align-items:center;justify-content:space-between;
+    position:relative;
+  }
+  .logo{
+    font-weight:800;font-size:19px;display:flex;align-items:center;gap:8px;
+  }
+  .logo-dot{
+    width:22px;height:22px;border-radius:7px;flex-shrink:0;
+    background:conic-gradient(from 180deg, var(--pink), var(--orange), var(--yellow), var(--green), var(--cyan), var(--purple), var(--pink));
+  }
+  .navlinks{display:none;gap:8px;font-size:13.5px;font-weight:600;align-items:center;}
+  @media(min-width:900px){.navlinks{display:flex;}}
+  .navlinks > a, .navlinks > .dropdown > summary{
+    color:var(--text-sub);transition:color .15s, background .15s;
+    padding:8px 14px;border-radius:8px;
+  }
+  .navlinks > a:hover, .navlinks > .dropdown > summary:hover{color:var(--text);background:var(--bg-alt);}
+  .dropdown{position:relative;}
+  .dropdown summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:5px;}
+  .dropdown summary::-webkit-details-marker{display:none;}
+  .dropdown summary::after{content:"";width:7px;height:7px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(45deg);margin-top:-3px;transition:transform .15s;}
+  .dropdown[open] summary::after{transform:rotate(225deg);margin-top:3px;}
+
+  .mega{
+    position:absolute;top:calc(100% + 10px);left:50%;transform:translateX(-50%);
+    background:#fff;border:1px solid var(--line);border-radius:18px;
+    box-shadow:0 24px 50px -20px rgba(0,0,0,0.25);
+    padding:24px;display:flex;flex-direction:column;gap:18px;z-index:50;
+  }
+  .mega-cols{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;}
+  .mega-wide{width:600px;}
+  .mega-narrow{width:280px;}
+  .mega-group h5{
+    font-size:11px;text-transform:uppercase;letter-spacing:0.07em;color:var(--text-sub);
+    margin:0 0 8px;font-weight:700;
+  }
+  .mega a{
+    display:flex;align-items:center;gap:10px;padding:8px 8px;border-radius:9px;
+    font-size:13.5px;font-weight:600;color:var(--text);
+  }
+  .mega a:hover{background:var(--bg-alt);}
+  .mega a .sw{width:8px;height:8px;border-radius:3px;flex-shrink:0;}
+  .mega-highlight{
+    background:var(--bg-alt);border-radius:14px;padding:14px 18px;
+    display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;
+  }
+  .mega-highlight .htxt{font-size:13px;font-weight:700;}
+  .mega-highlight .hsub{font-size:12px;color:var(--text-sub);font-weight:500;margin-top:2px;}
+
+  .navcta{display:flex;align-items:center;gap:12px;}
+  .btn{
+    font-weight:600;font-size:14px;padding:9px 20px;border-radius:980px;
+    display:inline-flex;align-items:center;gap:6px;cursor:pointer;border:none;
+    transition:background .15s, transform .1s, box-shadow .2s;
+  }
+  .btn-primary{background:var(--blue);color:#fff;}
+  .btn-primary:hover{background:var(--blue-hover);transform:translateY(-1px);box-shadow:0 8px 20px -6px rgba(0,113,227,0.5);}
+  .btn-outline{background:transparent;color:var(--blue);border:1px solid var(--blue);}
+  .btn-outline:hover{background:rgba(0,113,227,0.06);}
+  .btn-dark{background:var(--text);color:#fff;}
+  .btn-dark:hover{background:#000;}
+  .navcta .btn{font-size:13px;padding:7px 16px;}
+  .navcta .btn-outline{display:none;}
+  @media(min-width:720px){.navcta .btn-outline{display:inline-flex;}}
+  .link-chevron{color:var(--blue);font-weight:600;font-size:15px;display:inline-flex;align-items:center;gap:3px;}
+  .link-chevron:hover{text-decoration:underline;}
+
+  /* MOBILE MENU */
+  .burger{
+    display:flex;flex-direction:column;justify-content:center;gap:4px;
+    width:34px;height:34px;border:none;background:none;cursor:pointer;padding:0;
+  }
+  @media(min-width:900px){.burger{display:none;}}
+  .burger span{width:20px;height:2px;background:var(--text);border-radius:2px;transition:transform .2s ease, opacity .2s ease;margin:0 auto;}
+  .burger.open span:nth-child(1){transform:translateY(6px) rotate(45deg);}
+  .burger.open span:nth-child(2){opacity:0;}
+  .burger.open span:nth-child(3){transform:translateY(-6px) rotate(-45deg);}
+  .mobile-panel{
+    display:none;position:absolute;top:60px;left:0;right:0;background:#fff;
+    border-bottom:1px solid var(--line);box-shadow:0 20px 30px -20px rgba(0,0,0,0.15);
+    padding:14px 24px 24px;
+  }
+  .mobile-panel.open{display:block;}
+  .mobile-panel a{display:block;padding:13px 4px;font-weight:600;font-size:15.5px;border-bottom:1px solid var(--line);color:var(--text);}
+  .mobile-panel a:last-child{border-bottom:none;}
+  .mobile-cta{display:flex;gap:10px;margin-top:16px;}
+  .mobile-cta .btn{flex:1;justify-content:center;}
+
+  /* HERO */
+  .hero{
+    padding:80px 0 70px;text-align:center;
+    background:linear-gradient(180deg,#FFFFFF 0%, #F8F8FA 100%);
+    position:relative;overflow:hidden;
+  }
+  .hero::before{
+    content:'';position:absolute;top:-120px;left:50%;transform:translateX(-50%);
+    width:900px;height:500px;background:radial-gradient(ellipse, rgba(191,90,242,0.12) 0%, transparent 70%);
+    pointer-events:none;
+  }
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:8px;
+    font-size:13px;font-weight:600;color:var(--text-sub);
+    background:var(--bg-alt);padding:7px 16px;border-radius:980px;margin-bottom:22px;
+  }
+  .eyebrow .sparkle{width:7px;height:7px;border-radius:50%;background:linear-gradient(90deg,var(--pink),var(--purple));}
+  .hero h1{font-size:clamp(40px,6.8vw,72px);line-height:1.04;}
+  .hero h1 .grad{
+    background:linear-gradient(90deg, var(--pink), var(--purple), var(--blue));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .hero p.lede{font-size:clamp(17px,2vw,21px);color:var(--text-sub);max-width:620px;margin:24px auto 36px;font-weight:500;}
+  .hero-ctas{display:flex;gap:18px;justify-content:center;align-items:center;flex-wrap:wrap;margin-bottom:20px;}
+  .hero-ctas .btn{padding:14px 28px;font-size:16px;}
+  .rating-row{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:52px;font-size:13.5px;color:var(--text-sub);font-weight:600;}
+  .stars{color:var(--orange);letter-spacing:1px;}
+
+  .icon-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;max-width:960px;margin:0 auto;}
+  @media(min-width:700px){.icon-grid{grid-template-columns:repeat(4,1fr);}}
+  .tile{
+    background:var(--bg-alt);border-radius:var(--radius-md);padding:24px 18px;text-align:left;
+    display:flex;flex-direction:column;gap:34px;transition:transform .25s ease, box-shadow .25s ease;
+    border:1px solid transparent;
+  }
+  .tile:hover{transform:translateY(-6px);box-shadow:0 16px 40px -12px rgba(0,0,0,0.18);border-color:var(--line);}
+  .tile .ic{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;}
+  .tile .ic svg{width:22px;height:22px;}
+  .tile .label{font-size:14.5px;font-weight:700;}
+  .tile .sub{font-size:12.5px;color:var(--text-sub);margin-top:2px;}
+
+  /* PRODUCT SCREENSHOT */
+  .browser-mock{
+    margin:56px auto 0;max-width:980px;border-radius:20px;overflow:hidden;
+    border:1px solid var(--line);box-shadow:0 50px 100px -40px rgba(0,0,0,0.35);
+    background:#fff;
+  }
+  .browser-bar{background:var(--bg-alt);padding:12px 16px;display:flex;gap:7px;align-items:center;border-bottom:1px solid var(--line);}
+  .browser-bar span{width:11px;height:11px;border-radius:50%;background:#DDD;}
+  .browser-bar span:nth-child(1){background:#FF5F57;}
+  .browser-bar span:nth-child(2){background:#FEBC2E;}
+  .browser-bar span:nth-child(3){background:#28C840;}
+  .browser-mock img{width:100%;display:block;}
+  .asset-note{text-align:center;font-size:12px;color:var(--text-sub);margin-top:14px;font-weight:500;}
+
+  /* GALLERY OF REAL AI EXAMPLES */
+  .gallery-section{padding:80px 0 40px;background:var(--bg-alt);}
+  .gallery-grid{
+    display:grid;grid-template-columns:repeat(2,1fr);gap:16px;max-width:1100px;margin:0 auto;
+  }
+  @media(min-width:800px){.gallery-grid{grid-template-columns:repeat(4,1fr);}}
+  .gallery-item{
+    border-radius:16px;overflow:hidden;position:relative;aspect-ratio:1;
+    box-shadow:0 8px 30px -10px rgba(0,0,0,0.2);transition:transform .3s ease;
+  }
+  .gallery-item:hover{transform:scale(1.03);}
+  .gallery-item img{width:100%;height:100%;object-fit:cover;}
+  .gallery-item .caption{
+    position:absolute;bottom:0;left:0;right:0;padding:16px 14px;
+    background:linear-gradient(transparent, rgba(0,0,0,0.75));
+    color:#fff;font-size:13px;font-weight:600;
+  }
+
+  /* VIDEO SECTION */
+  .video-shell{
+    max-width:920px;margin:0 auto;border-radius:var(--radius-lg);overflow:hidden;
+    box-shadow:0 40px 80px -30px rgba(0,0,0,0.35);position:relative;background:#000;
+  }
+  .video-shell video{width:100%;display:block;max-height:540px;object-fit:cover;}
+
+  .section-head{max-width:680px;margin:0 auto 60px;text-align:center;}
+  .section-head .eyebrow{margin-bottom:16px;}
+  .section-head h2{font-size:clamp(30px,4.6vw,46px);line-height:1.08;}
+  .section-head p{color:var(--text-sub);font-size:18px;margin-top:18px;font-weight:500;}
+
+  /* TRUSTED BY */
+  .trusted{padding:44px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+  .trusted p.label{text-align:center;font-size:12.5px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-sub);margin-bottom:26px;}
+  .brand-row{display:flex;flex-wrap:wrap;justify-content:center;gap:40px;align-items:center;}
+  .brand-row span{font-size:19px;font-weight:800;color:#B9B9BE;letter-spacing:-0.02em;}
+
+  .stats{background:var(--bg-alt);}
+  .stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:36px;text-align:center;}
+  @media(min-width:800px){.stats-grid{grid-template-columns:repeat(4,1fr);}}
+  .stat .num{font-size:clamp(32px,5vw,48px);font-weight:800;background:linear-gradient(90deg,var(--blue),var(--purple));-webkit-background-clip:text;background-clip:text;color:transparent;}
+  .stat .cap{font-size:14px;color:var(--text-sub);margin-top:6px;font-weight:500;}
+
+  .feature-row{display:grid;grid-template-columns:1fr;gap:40px;align-items:center;padding:56px 0;border-bottom:1px solid var(--line);}
+  .feature-row:last-child{border-bottom:none;}
+  @media(min-width:900px){.feature-row{grid-template-columns:1fr 1fr;gap:70px;}}
+  .feature-row.reverse .visual{order:2;}
+  @media(min-width:900px){.feature-row.reverse .text{order:2;} .feature-row.reverse .visual{order:1;}}
+  .feature-row .badge{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:700;padding:6px 14px;border-radius:980px;margin-bottom:18px;}
+  .feature-row h3{font-size:clamp(24px,3.4vw,32px);margin-bottom:16px;line-height:1.15;}
+  .feature-row p.desc{color:var(--text-sub);font-size:16.5px;margin-bottom:22px;font-weight:500;}
+  .feature-row ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px;}
+  .feature-row li{font-size:15px;font-weight:500;display:flex;gap:10px;align-items:flex-start;}
+  .feature-row li .tick{width:18px;height:18px;border-radius:50%;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;}
+  .feature-row li .tick svg{width:11px;height:11px;}
+  .visual{border-radius:var(--radius-lg);min-height:320px;display:flex;align-items:flex-end;position:relative;overflow:hidden;}
+  .visual img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .5s ease;}
+  .visual:hover img{transform:scale(1.05);}
+  .visual::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg, rgba(0,0,0,0) 40%, rgba(0,0,0,0.5) 100%);}
+  .visual-badge{position:absolute;top:20px;left:20px;width:46px;height:46px;border-radius:13px;display:flex;align-items:center;justify-content:center;z-index:2;box-shadow:0 8px 20px -6px rgba(0,0,0,0.3);}
+  .visual-badge svg{width:22px;height:22px;}
+  .visual .float-chip{z-index:2;}
+  .float-chip{position:absolute;background:rgba(255,255,255,0.92);backdrop-filter:blur(8px);border-radius:12px;padding:8px 14px;font-size:12.5px;font-weight:700;color:var(--text);box-shadow:0 8px 20px -8px rgba(0,0,0,0.25);}
+
+  /* TESTIMONIALS */
+  .testimonials{background:var(--bg-alt);}
+  .test-grid{display:grid;grid-template-columns:1fr;gap:18px;}
+  @media(min-width:800px){.test-grid{grid-template-columns:repeat(3,1fr);}}
+  .test-card{background:#fff;border-radius:var(--radius-lg);padding:28px 26px;box-shadow:0 1px 2px rgba(0,0,0,0.04);display:flex;flex-direction:column;gap:16px;transition:transform .2s;}
+  .test-card:hover{transform:translateY(-4px);}
+  .test-card .stars{font-size:14px;}
+  .test-card p.quote{font-size:15px;font-weight:500;color:var(--text);line-height:1.6;}
+  .test-who{display:flex;align-items:center;gap:12px;margin-top:auto;}
+  .avatar{width:38px;height:38px;border-radius:50%;object-fit:cover;flex-shrink:0;box-shadow:0 0 0 2px #fff, 0 0 0 3px var(--line);}
+  .test-who .name{font-size:13.5px;font-weight:700;}
+  .test-who .role{font-size:12px;color:var(--text-sub);font-weight:500;}
+
+  .segments{background:var(--bg-alt);}
+  .seg-grid{display:grid;grid-template-columns:1fr;gap:16px;}
+  @media(min-width:700px){.seg-grid{grid-template-columns:1fr 1fr;}}
+  @media(min-width:1040px){.seg-grid{grid-template-columns:repeat(3,1fr);}}
+  .seg-card{background:#fff;border-radius:var(--radius-lg);padding:28px 26px;min-height:200px;display:flex;flex-direction:column;gap:12px;box-shadow:0 1px 2px rgba(0,0,0,0.04);transition:transform .2s ease, box-shadow .2s ease;}
+  .seg-card:hover{transform:translateY(-4px);box-shadow:0 16px 32px -16px rgba(0,0,0,0.18);}
+  .seg-card .ic{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:4px;}
+  .seg-card .ic svg{width:20px;height:20px;}
+  .seg-card h3{font-size:19px;font-weight:700;}
+  .seg-card p{color:var(--text-sub);font-size:14.5px;font-weight:500;}
+  .seg-uses{margin-top:auto;display:flex;flex-wrap:wrap;gap:7px;}
+  .chip{font-size:11.5px;font-weight:600;padding:5px 11px;border-radius:980px;background:var(--bg-alt);color:var(--text-sub);}
+
+  .steps-row{display:grid;grid-template-columns:1fr;gap:32px;position:relative;}
+  @media(min-width:800px){.steps-row{grid-template-columns:repeat(3,1fr);}}
+  .step{background:#fff;border:1px solid var(--line);border-radius:var(--radius-lg);padding:32px 26px;}
+  .step .stepnum{width:34px;height:34px;border-radius:50%;background:var(--text);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;margin-bottom:20px;}
+  .step h3{font-size:19px;margin-bottom:10px;}
+  .step p{color:var(--text-sub);font-size:14.5px;font-weight:500;}
+
+  .compare{background:var(--bg-dark);color:#fff;}
+  .compare .section-head h2{color:#fff;}
+  .compare .section-head p{color:rgba(255,255,255,0.6);}
+  .compare-grid{display:grid;grid-template-columns:1fr;gap:20px;}
+  @media(min-width:800px){.compare-grid{grid-template-columns:1fr 1fr;}}
+  .compare-card{border-radius:var(--radius-lg);padding:34px;}
+  .compare-card.bad{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);}
+  .compare-card.good{background:linear-gradient(135deg, rgba(255,55,95,0.18), rgba(94,92,230,0.18));border:1px solid rgba(255,255,255,0.18);}
+  .compare-card h4{font-size:13px;text-transform:uppercase;letter-spacing:0.06em;color:rgba(255,255,255,0.55);margin-bottom:18px;font-weight:700;}
+  .compare-card .line{display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.1);font-size:14.5px;font-weight:500;}
+  .compare-card .line:last-child{border-bottom:none;}
+  .compare-card .line .cost{font-weight:700;}
+
+  .toggle-row{display:flex;align-items:center;gap:14px;justify-content:center;margin-bottom:48px;}
+  .toggle{display:inline-flex;background:var(--bg-alt);border-radius:980px;padding:4px;}
+  .toggle button{border:none;background:none;padding:9px 20px;border-radius:980px;cursor:pointer;font-weight:600;font-size:13.5px;color:var(--text-sub);}
+  .toggle button.active{background:#fff;color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,0.15);}
+  .save-note{font-size:13px;font-weight:600;color:var(--green);}
+  .plan-grid{display:grid;grid-template-columns:1fr;gap:18px;}
+  @media(min-width:900px){.plan-grid{grid-template-columns:repeat(4,1fr);}}
+  .plan{background:#fff;border:1px solid var(--line);border-radius:var(--radius-lg);padding:30px 24px;display:flex;flex-direction:column;}
+  .plan.feat{border:2px solid var(--blue);position:relative;box-shadow:0 20px 40px -20px rgba(0,113,227,0.35);}
+  .plan.feat::before{content:"MOST POPULAR";position:absolute;top:-12px;left:24px;background:var(--blue);color:#fff;font-size:10.5px;font-weight:700;letter-spacing:0.05em;padding:5px 12px;border-radius:980px;}
+  .plan h3{font-size:18px;margin-bottom:6px;}
+  .plan .who{font-size:13px;color:var(--text-sub);margin-bottom:22px;font-weight:500;}
+  .price{display:flex;align-items:baseline;gap:5px;margin-bottom:4px;}
+  .price .amt{font-size:38px;font-weight:800;}
+  .price .per{font-size:13px;color:var(--text-sub);font-weight:500;}
+  .plan .billed{font-size:12.5px;color:var(--text-sub);margin-bottom:26px;font-weight:500;}
+  .plan ul{list-style:none;margin:0 0 28px;padding:0;display:flex;flex-direction:column;gap:12px;}
+  .plan li{font-size:14px;font-weight:500;display:flex;gap:9px;align-items:flex-start;color:var(--text);}
+  .plan li .tick{width:16px;height:16px;border-radius:50%;background:var(--green);flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;}
+  .plan li .tick svg{width:9px;height:9px;}
+  .plan .btn{margin-top:auto;justify-content:center;width:100%;padding:12px;font-size:15px;}
+  .edu-note{margin-top:32px;padding:18px 22px;border:1px solid var(--line);border-radius:var(--radius-md);font-size:14px;color:var(--text-sub);text-align:center;font-weight:500;}
+  .edu-note strong{color:var(--text);}
+
+  .faq{background:var(--bg-alt);}
+  .faq-list{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:12px;}
+  details{background:#fff;border-radius:14px;padding:6px 22px;border:1px solid var(--line);}
+  summary{cursor:pointer;font-weight:700;font-size:16px;padding:18px 0;list-style:none;display:flex;justify-content:space-between;align-items:center;}
+  summary::-webkit-details-marker{display:none;}
+  .faq summary::after{content:"+";font-size:22px;font-weight:400;color:var(--text-sub);}
+  .faq details[open] summary::after{content:"–";}
+  details p{color:var(--text-sub);font-size:14.5px;padding-bottom:20px;font-weight:500;line-height:1.6;}
+
+  .final-cta{text-align:center;background:linear-gradient(135deg, var(--pink), var(--purple) 55%, var(--blue));color:#fff;border-radius:var(--radius-lg);margin:0 24px;padding:80px 24px;}
+  .final-cta h2{color:#fff;font-size:clamp(28px,4.6vw,42px);margin-bottom:18px;}
+  .final-cta p{color:rgba(255,255,255,0.85);font-size:17px;margin-bottom:32px;font-weight:500;}
+  .final-cta .btn-primary{background:#fff;color:var(--text);}
+  .final-cta .btn-primary:hover{background:#f2f2f2;}
+
+  /* FOOTER */
+  footer{background:var(--bg-dark);color:rgba(255,255,255,0.9);padding-top:64px;}
+  .foot-top{display:grid;grid-template-columns:1fr;gap:44px;padding-bottom:48px;border-bottom:1px solid rgba(255,255,255,0.12);}
+  @media(min-width:800px){.foot-top{grid-template-columns:1.3fr 1fr;align-items:center;}}
+  .foot-top h3{color:#fff;font-size:24px;margin-bottom:10px;}
+  .foot-top p{color:rgba(255,255,255,0.55);font-size:14.5px;font-weight:500;max-width:380px;}
+  .newsletter{display:flex;gap:10px;max-width:420px;}
+  .newsletter input{
+    flex:1;padding:13px 16px;border-radius:980px;border:1px solid rgba(255,255,255,0.2);
+    background:rgba(255,255,255,0.06);color:#fff;font-size:14px;font-family:inherit;
+  }
+  .newsletter input::placeholder{color:rgba(255,255,255,0.4);}
+  .newsletter input:focus{outline:2px solid var(--blue);outline-offset:1px;}
+  .newsletter button{white-space:nowrap;}
+
+  .foot-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:32px;padding:48px 0;}
+  @media(min-width:700px){.foot-grid{grid-template-columns:repeat(4,1fr);}}
+  .foot-grid h4{font-size:12px;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.45);margin-bottom:18px;font-weight:700;}
+  .foot-grid a{display:block;font-size:13.8px;color:rgba(255,255,255,0.72);margin-bottom:13px;font-weight:500;}
+  .foot-grid a:hover{color:#fff;}
+
+  .foot-bottom{
+    border-top:1px solid rgba(255,255,255,0.12);
+    padding:26px 0 34px;
+    display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:18px;
+  }
+  .foot-legal{display:flex;flex-wrap:wrap;gap:20px;font-size:12.5px;color:rgba(255,255,255,0.5);font-weight:500;}
+  .foot-legal a:hover{color:#fff;}
+  .foot-right{display:flex;align-items:center;gap:18px;}
+  .region-select{
+    background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.16);color:rgba(255,255,255,0.75);
+    font-size:12.5px;font-weight:500;padding:7px 12px;border-radius:8px;font-family:inherit;
+  }
+  .social-row{display:flex;gap:10px;}
+  .social-row a{
+    width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,0.08);
+    display:flex;align-items:center;justify-content:center;transition:background .15s;
+  }
+  .social-row a:hover{background:rgba(255,255,255,0.18);}
+  .social-row svg{width:16px;height:16px;}
+
+  .back-top{
+    position:fixed;bottom:24px;right:24px;width:44px;height:44px;border-radius:50%;
+    background:var(--text);color:#fff;display:flex;align-items:center;justify-content:center;
+    box-shadow:0 8px 20px -6px rgba(0,0,0,0.35);opacity:0;pointer-events:none;
+    transition:opacity .2s ease, transform .2s ease;z-index:80;border:none;cursor:pointer;
+  }
+  .back-top.show{opacity:1;pointer-events:auto;}
+  .back-top:hover{transform:translateY(-3px);}
+
+  :focus-visible{outline:2px solid var(--blue);outline-offset:3px;}
+</style>
+</head>
+<body>
+
+<div class="announce">✨ Introducing Gnexoai Pro — <a href="#pricing">try free for 14 days</a></div>
+
+<header>
+  <nav>
+    <div class="logo"><span class="logo-dot"></span>Gnexoai</div>
+
+    <div class="navlinks">
+      <details class="dropdown">
+        <summary>What we do</summary>
+        <div class="mega mega-wide">
+          <div class="mega-cols">
+            <div class="mega-group">
+              <h5>Create</h5>
+              <a href="#capabilities"><span class="sw" style="background:var(--pink)"></span>Writing & Chat</a>
+              <a href="#capabilities"><span class="sw" style="background:var(--orange)"></span>Image Generation</a>
+              <a href="#capabilities"><span class="sw" style="background:var(--purple)"></span>Video & Motion</a>
+            </div>
+            <div class="mega-group">
+              <h5>Automate</h5>
+              <a href="#agents"><span class="sw" style="background:var(--indigo)"></span>AI Agents</a>
+              <a href="#capabilities"><span class="sw" style="background:var(--blue)"></span>Code & Automation</a>
+              <a href="#agents"><span class="sw" style="background:var(--green)"></span>Workflows</a>
+            </div>
+            <div class="mega-group">
+              <h5>Understand</h5>
+              <a href="#capabilities"><span class="sw" style="background:var(--cyan)"></span>Data & Research</a>
+              <a href="#capabilities"><span class="sw" style="background:var(--yellow)"></span>Translation</a>
+              <a href="#capabilities"><span class="sw" style="background:var(--green)"></span>Voice & Audio</a>
+            </div>
+          </div>
+          <div class="mega-highlight">
+            <div><div class="htxt">See every category in detail</div><div class="hsub">Full breakdown of what's included in every plan</div></div>
+            <a href="#capabilities" class="link-chevron">View all ›</a>
+          </div>
+        </div>
+      </details>
+
+      <details class="dropdown">
+        <summary>Solutions</summary>
+        <div class="mega mega-narrow">
+          <div class="mega-group">
+            <h5>By audience</h5>
+            <a href="#segments"><span class="sw" style="background:var(--pink)"></span>Personal</a>
+            <a href="#segments"><span class="sw" style="background:var(--orange)"></span>Student</a>
+            <a href="#segments"><span class="sw" style="background:var(--purple)"></span>Teacher</a>
+            <a href="#segments"><span class="sw" style="background:var(--blue)"></span>Business</a>
+            <a href="#segments"><span class="sw" style="background:var(--green)"></span>Influencer</a>
+            <a href="#segments"><span class="sw" style="background:var(--indigo)"></span>Entrepreneur</a>
+          </div>
+        </div>
+      </details>
+
+      <a href="#pricing">Pricing</a>
+
+      <details class="dropdown">
+        <summary>Company</summary>
+        <div class="mega mega-narrow">
+          <div class="mega-group">
+            <a href="#">About Gnexoai</a>
+            <a href="#">Careers</a>
+            <a href="#">Blog</a>
+            <a href="#faq">FAQ</a>
+            <a href="#">Contact</a>
+          </div>
+        </div>
+      </details>
+    </div>
+
+    <div class="navcta">
+      <a href="#" class="btn btn-outline">Sign in</a>
+      <a href="#pricing" class="btn btn-primary">Start free</a>
+      <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+
+    <div class="mobile-panel" id="mobilePanel">
+      <a href="#capabilities">What we do</a>
+      <a href="#segments">Who it's for</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#faq">FAQ</a>
+      <div class="mobile-cta">
+        <a href="#" class="btn btn-outline">Sign in</a>
+        <a href="#pricing" class="btn btn-primary">Start free</a>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div class="eyebrow"><span class="sparkle"></span>One subscription. Every AI.</div>
+    <h1>All the AI you'll ever<br>need, <span class="grad">in one place.</span></h1>
+    <p class="lede">Gnexoai gathers writing, image, video, voice, code, and research AI into a single, beautifully simple workspace — for anyone, doing anything.</p>
+    <div class="hero-ctas">
+      <a href="#pricing" class="btn btn-primary">Get started free</a>
+      <a href="#capabilities" class="link-chevron">See everything we do  ›</a>
+    </div>
+    <div class="rating-row"><span class="stars">★★★★★</span> Loved by creators, students & teams everywhere</div>
+
+    <div class="icon-grid">
+      <div class="tile">
+        <div class="ic" style="background:var(--pink)"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></div>
+        <div><div class="label">Writing & Chat</div><div class="sub">Docs, emails, ideas</div></div>
+      </div>
+      <div class="tile">
+        <div class="ic" style="background:var(--orange)"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></svg></div>
+        <div><div class="label">Image</div><div class="sub">Create & edit visuals</div></div>
+      </div>
+      <div class="tile">
+        <div class="ic" style="background:var(--purple)"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></div>
+        <div><div class="label">Video & Motion</div><div class="sub">Scripts to final cut</div></div>
+      </div>
+      <div class="tile">
+        <div class="ic" style="background:var(--green)"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/></svg></div>
+        <div><div class="label">Voice & Audio</div><div class="sub">Speech, music, dubs</div></div>
+      </div>
+      <div class="tile">
+        <div class="ic" style="background:var(--blue)"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
+        <div><div class="label">Code</div><div class="sub">Build & debug faster</div></div>
+      </div>
+      <div class="tile">
+        <div class="ic" style="background:var(--cyan)"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
+        <div><div class="label">Data & Research</div><div class="sub">Analyze & summarize</div></div>
+      </div>
+      <div class="tile">
+        <div class="ic" style="background:var(--yellow)"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
+        <div><div class="label">Automation</div><div class="sub">Workflows on autopilot</div></div>
+      </div>
+      <div class="tile">
+        <div class="ic" style="background:var(--indigo)"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+        <div><div class="label">Translation</div><div class="sub">50+ languages</div></div>
+      </div>
+    </div>
+
+    <div class="browser-mock">
+      <div class="browser-bar"><span></span><span></span><span></span></div>
+      <img src="https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1400&q=80" alt="Modern AI workspace dashboard">
+    </div>
+    <p class="asset-note">Real product-style preview of the Gnexoai unified workspace</p>
+  </div>
+</section>
+
+<!-- REAL AI EXAMPLES GALLERY -->
+<section class="gallery-section">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow"><span class="sparkle"></span>Created with Gnexoai</div>
+      <h2>Real examples from our community</h2>
+      <p>Images, concepts and visuals generated inside Gnexoai — no other tools needed.</p>
+    </div>
+    <div class="gallery-grid">
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1618005182384-a83fe6d10bdf?w=600&q=80" alt="Abstract AI art">
+        <div class="caption">Abstract concept art</div>
+      </div>
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=600&q=80" alt="Futuristic city">
+        <div class="caption">Futuristic cityscape</div>
+      </div>
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?w=600&q=80" alt="Product visualization">
+        <div class="caption">Product visualization</div>
+      </div>
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1620121692029-d088224ddc74?w=600&q=80" alt="Creative portrait">
+        <div class="caption">Creative portrait</div>
+      </div>
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=600&q=80" alt="3D abstract">
+        <div class="caption">3D abstract design</div>
+      </div>
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1614850523459-c2f4c699c52e?w=600&q=80" alt="Nature fantasy">
+        <div class="caption">Fantasy landscape</div>
+      </div>
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d?w=600&q=80" alt="Neon aesthetic">
+        <div class="caption">Neon aesthetic</div>
+      </div>
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1618005198919-d3d4b5a92ead?w=600&q=80" alt="Minimal product">
+        <div class="caption">Minimal product shot</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="trusted">
+  <p class="label">Trusted by students, creators & teams at growing companies</p>
+  <div class="brand-row">
+    <span>Northfield Co.</span><span>Kestrel Labs</span><span>Brightpath</span><span>Lumen Studio</span><span>Vantage Group</span>
+  </div>
+</div>
+
+<section class="stats">
+  <div class="wrap">
+    <div class="stats-grid">
+      <div class="stat"><div class="num">8</div><div class="cap">AI categories, unified</div></div>
+      <div class="stat"><div class="num">1</div><div class="cap">Subscription to remember</div></div>
+      <div class="stat"><div class="num">6</div><div class="cap">Audiences we're built for</div></div>
+      <div class="stat"><div class="num">0</div><div class="cap">Extra logins needed</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="capabilities">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow"><span class="sparkle"></span>Everything we do</div>
+      <h2>One workspace.<br>Every kind of AI.</h2>
+      <p>Here's exactly what's inside Gnexoai — no separate apps, no separate bills.</p>
+    </div>
+
+    <div class="feature-row">
+      <div class="text">
+        <div class="badge" style="background:rgba(255,55,95,0.12);color:var(--pink)">Writing & Chat</div>
+        <h3>From a blank page to a finished draft</h3>
+        <p class="desc">Chat naturally, brainstorm ideas, and generate polished emails, essays, captions, and reports — all tuned to your voice.</p>
+        <ul>
+          <li><span class="tick" style="background:var(--pink)"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>Long-form writing & editing</li>
+          <li><span class="tick" style="background:var(--pink)"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>Real-time conversational chat</li>
+          <li><span class="tick" style="background:var(--pink)"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>Tone & style presets</li>
+        </ul>
+      </div>
+      <div class="visual">
+        <img src="https://images.unsplash.com/photo-1455390582262-044cdead277a?w=900&q=80" alt="Writing and creativity">
+        <div class="visual-badge" style="background:var(--pink)"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></div>
+        <div class="float-chip" style="top:24px;right:24px;">✍️ Draft ready in 4s</div>
+        <div class="float-chip" style="bottom:24px;left:24px;">12 tones available</div>
+      </div>
+    </div>
+
+    <div class="feature-row reverse">
+      <div class="text">
+        <div class="badge" style="background:rgba(255,159,10,0.14);color:#B5690A">Image Generation</div>
+        <h3>Create and edit visuals in seconds</h3>
+        <p class="desc">Generate original artwork, product shots, and social graphics, or edit existing photos — remove backgrounds, retouch, restyle.</p>
+        <ul>
+          <li><span class="tick" style="background:var(--orange)"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>Text-to-image generation</li>
+          <li><span class="tick" style="background:var(--orange)"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>Background removal & retouching</li>
+          <li><span class="tick" style="background:var(--orange)"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>Brand-consistent templates</li>
+        </ul>
+      </div>
+      <div class="visual">
+        <img src="https://images.unsplash.com/photo-1618005182384-a83fe6d10bdf?w=900&q=80" alt="AI generated visual art">
+        <div class="visual-badge" style="background:var(--orange)"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></svg></div>
+        <div class="float-chip" style="top:24px;right:24px;">🎨 4K exports</div>
+        <div class="float-chip" style="bottom:24px;left:24px;">Auto background removal</div>
+      </div>
+    </div>
+
+    <div class="feature-row">
+      <div class="text">
+        <div class="badge" style="background:rgba(191,90,242,0.12);color:var(--purple)">Video & Motion</div>
+        <h3>Script, shoot, and edit — without a crew</h3>
+        <p class="desc">Turn an idea into a script, generate B-roll and motion graphics, and auto-edit clips into a finished, captioned video.</p>
+        <ul>
+          <li><span class="tick" style="background:var(--purple)"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>Text-to-video generation</li>
+          <li><span class="tick" style="background:var(--purple)"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>Auto captions & subtitles</li>
+          <li><span class="tick" style="background:var(--purple)"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>Smart trimming & pacing</li>
+        </ul>
+      </div>
+      <div class="visual">
+        <img src="https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=900&q=80" alt="Video production">
+        <div class="visual-badge" style="background:var(--purple)"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></div>
+        <div class="float-chip" style="top:24px;left:24px;">🎬 Auto captions</div>
+        <div class="float-chip" style="bottom:24px;right:24px;">Ready for every platform</div>
+      </div>
+    </div>
+
+    <div class="feature-row reverse">
+      <div class="text">
+        <div class="badge" style="background:rgba(48,209,88,0.14);color:#1D8A3A">Voice & Audio</div>
+        <h3>Give your content a voice</h3>
+        <p class="desc">Generate natural voiceovers, clone your own voice for consistency, transcribe recordings, and compose background music.</p>
+        <ul>
+          <li><span class="tick" style="background:var(--green)"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>Realistic text-to-speech</li>
+          <li><span class="tick" style="background:var(--green)"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>Transcription & subtitles</li>
+          <li><span class="tick" style="background:var(--green)"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>Background score generation</li>
+        </ul>
+      </div>
+      <div class="visual">
+        <img src="https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=900&q=80" alt="Audio studio">
+        <div class="visual-badge" style="background:var(--green)"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/></svg></div>
+        <div class="float-chip" style="top:24px;right:24px;">🎙️ 40+ voices</div>
+        <div class="float-chip" style="bottom:24px;left:24px;">Clone your own voice</div>
+      </div>
+    </div>
+
+    <div class="feature-row">
+      <div class="text">
+        <div class="badge" style="background:rgba(10,132,255,0.12);color:var(--blue)">Code & Automation</div>
+        <h3>Build, debug, and automate the busywork</h3>
+        <p class="desc">Write and explain code across languages, fix bugs fast, and automate repetitive tasks with no-code workflow builders.</p>
+        <ul>
+          <li><span class="tick" style="background:var(--blue)"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>Code generation & explanation</li>
+          <li><span class="tick" style="background:var(--blue)"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>Bug detection & fixes</li>
+          <li><span class="tick" style="background:var(--blue)"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>No-code workflow automation</li>
+        </ul>
+      </div>
+      <div class="visual">
+        <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=900&q=80" alt="Code on screen">
+        <div class="visual-badge" style="background:var(--blue)"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
+        <div class="float-chip" style="top:24px;left:24px;">⚡ 20+ languages</div>
+        <div class="float-chip" style="bottom:24px;right:24px;">One-click automations</div>
+      </div>
+    </div>
+
+    <div class="feature-row reverse">
+      <div class="text">
+        <div class="badge" style="background:rgba(64,200,224,0.16);color:#0C8DA6">Data, Research & Translation</div>
+        <h3>Understand anything, in any language</h3>
+        <p class="desc">Summarize documents, analyze spreadsheets, pull insights from research, and translate content across 50+ languages instantly.</p>
+        <ul>
+          <li><span class="tick" style="background:var(--cyan)"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>Document & spreadsheet analysis</li>
+          <li><span class="tick" style="background:var(--cyan)"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>Research summarization & citations</li>
+          <li><span class="tick" style="background:var(--cyan)"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>Instant 50+ language translation</li>
+        </ul>
+      </div>
+      <div class="visual">
+        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=900&q=80" alt="Data analytics dashboard">
+        <div class="visual-badge" style="background:var(--cyan)"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
+        <div class="float-chip" style="top:24px;right:24px;">📊 Instant charts</div>
+        <div class="float-chip" style="bottom:24px;left:24px;">50+ languages</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="agents">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow"><span class="sparkle"></span>Beyond chat</div>
+      <h2>Build your own AI agents — no code required</h2>
+      <p>Set up an agent once and let it run in the background: watching, drafting, and reporting so you don't have to ask every time.</p>
+    </div>
+    <div class="seg-grid">
+      <div class="seg-card">
+        <div class="ic" style="background:rgba(255,159,10,0.14)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10 12 4 2 10l10 6 10-6Z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></div>
+        <h3>Study agent</h3>
+        <p>Reads your weekly course material and turns it into a summary and quiz every Sunday night, automatically.</p>
+        <div class="seg-uses"><span class="chip">Student</span><span class="chip">Weekly digest</span></div>
+      </div>
+      <div class="seg-card">
+        <div class="ic" style="background:rgba(10,132,255,0.12)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></div>
+        <h3>Reporting agent</h3>
+        <p>Pulls numbers from your spreadsheets each Friday and drafts a plain-English report ready for your team.</p>
+        <div class="seg-uses"><span class="chip">Business</span><span class="chip">Weekly digest</span></div>
+      </div>
+      <div class="seg-card">
+        <div class="ic" style="background:rgba(94,92,230,0.12)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--indigo)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9z"/></svg></div>
+        <h3>Market-watch agent</h3>
+        <p>Tracks competitors and industry news, then sends you a short brief the moment something worth knowing happens.</p>
+        <div class="seg-uses"><span class="chip">Entrepreneur</span><span class="chip">Real-time alerts</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="demo">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow"><span class="sparkle"></span>See it in action</div>
+      <h2>Gnexoai, in about 90 seconds</h2>
+      <p>A quick look at switching between tools inside one workspace.</p>
+    </div>
+    <div class="video-shell">
+      <video controls poster="https://images.unsplash.com/photo-1618005182384-a83fe6d10bdf?w=1280&q=80" preload="metadata">
+        <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    </div>
+    <p class="asset-note">Demo video — replace with your real product walkthrough before launch</p>
+  </div>
+</section>
+
+<section class="testimonials">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow"><span class="sparkle"></span>What people say</div>
+      <h2>Loved by the people who use it daily</h2>
+    </div>
+    <div class="test-grid">
+      <div class="test-card">
+        <div class="stars">★★★★★</div>
+        <p class="quote">"I dropped four separate AI subscriptions the week I switched. Everything I need for client work is just... here."</p>
+        <div class="test-who">
+          <img class="avatar" src="https://i.pravatar.cc/100?img=47" alt="Sara R.">
+          <div><div class="name">Sara R.</div><div class="role">Freelance entrepreneur</div></div>
+        </div>
+      </div>
+      <div class="test-card">
+        <div class="stars">★★★★★</div>
+        <p class="quote">"My students use it to study, I use it to build lesson plans. Same app, completely different jobs."</p>
+        <div class="test-who">
+          <img class="avatar" src="https://i.pravatar.cc/100?img=12" alt="Marcus K.">
+          <div><div class="name">Marcus K.</div><div class="role">High school teacher</div></div>
+        </div>
+      </div>
+      <div class="test-card">
+        <div class="stars">★★★★★</div>
+        <p class="quote">"Scripting, thumbnails, and captions used to take me three apps. Now it's one tab, start to finish."</p>
+        <div class="test-who">
+          <img class="avatar" src="https://i.pravatar.cc/100?img=32" alt="Jade T.">
+          <div><div class="name">Jade T.</div><div class="role">Content creator</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="segments" id="segments">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow"><span class="sparkle"></span>Built around you</div>
+      <h2>Whoever you are, it fits.</h2>
+      <p>Gnexoai adapts its tools and pricing to how you actually use AI.</p>
+    </div>
+    <div class="seg-grid">
+      <div class="seg-card">
+        <div class="ic" style="background:rgba(255,55,95,0.12)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--pink)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+        <h3>Personal</h3>
+        <p>Plan trips, edit photos, and get everyday help from one simple app.</p>
+        <div class="seg-uses"><span class="chip">Chat</span><span class="chip">Image edit</span><span class="chip">Planning</span></div>
+      </div>
+      <div class="seg-card">
+        <div class="ic" style="background:rgba(255,159,10,0.14)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10 12 4 2 10l10 6 10-6Z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></div>
+        <h3>Student</h3>
+        <p>Summarize readings, work through problem sets, and build flashcards fast.</p>
+        <div class="seg-uses"><span class="chip">Summarize</span><span class="chip">Tutor mode</span><span class="chip">Citations</span></div>
+      </div>
+      <div class="seg-card">
+        <div class="ic" style="background:rgba(191,90,242,0.12)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div>
+        <h3>Teacher</h3>
+        <p>Build lesson plans, generate practice questions, and draft rubric feedback.</p>
+        <div class="seg-uses"><span class="chip">Lesson plans</span><span class="chip">Rubrics</span><span class="chip">Worksheets</span></div>
+      </div>
+      <div class="seg-card">
+        <div class="ic" style="background:rgba(10,132,255,0.12)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></div>
+        <h3>Business</h3>
+        <p>Draft proposals, analyze spreadsheets, and automate reports across your team.</p>
+        <div class="seg-uses"><span class="chip">Reports</span><span class="chip">Automation</span><span class="chip">Team seats</span></div>
+      </div>
+      <div class="seg-card">
+        <div class="ic" style="background:rgba(48,209,88,0.14)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="14" height="12" rx="2"/><path d="m22 8-6 4 6 4V8Z"/></svg></div>
+        <h3>Influencer</h3>
+        <p>Script videos, generate thumbnails, and repurpose one post into ten.</p>
+        <div class="seg-uses"><span class="chip">Scripts</span><span class="chip">Thumbnails</span><span class="chip">Repurposing</span></div>
+      </div>
+      <div class="seg-card">
+        <div class="ic" style="background:rgba(94,92,230,0.12)"><svg viewBox="0 0 24 24" fill="none" stroke="var(--indigo)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9z"/></svg></div>
+        <h3>Entrepreneur</h3>
+        <p>Pitch decks, landing page copy, market research, and mockups — idea to launch.</p>
+        <div class="seg-uses"><span class="chip">Decks</span><span class="chip">Research</span><span class="chip">Mockups</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="how">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow"><span class="sparkle"></span>How it works</div>
+      <h2>Set up once. Use everything after.</h2>
+    </div>
+    <div class="steps-row">
+      <div class="step">
+        <div class="stepnum">1</div>
+        <h3>Create your account</h3>
+        <p>Tell us what you mainly need AI for — your workspace sets itself up with the right tools front and center.</p>
+      </div>
+      <div class="step">
+        <div class="stepnum">2</div>
+        <h3>Pick the AI for the job</h3>
+        <p>Switch between writing, image, video, voice, and code tools from the same screen — no separate logins.</p>
+      </div>
+      <div class="step">
+        <div class="stepnum">3</div>
+        <h3>Create without limits</h3>
+        <p>Everything you make is saved to one library, so your work follows you across tools and devices.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="compare">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow" style="background:rgba(255,255,255,0.1);color:#fff"><span class="sparkle"></span>Why one subscription</div>
+      <h2>Stop juggling six AI subscriptions</h2>
+      <p>Most people already pay for separate tools without realizing how much it adds up.</p>
+    </div>
+    <div class="compare-grid">
+      <div class="compare-card bad">
+        <h4>Without Gnexoai</h4>
+        <div class="line"><span>Writing assistant</span><span class="cost">$20/mo</span></div>
+        <div class="line"><span>Image generator</span><span class="cost">$15/mo</span></div>
+        <div class="line"><span>Video editor AI</span><span class="cost">$25/mo</span></div>
+        <div class="line"><span>Voice generator</span><span class="cost">$12/mo</span></div>
+        <div class="line"><span>Code assistant</span><span class="cost">$20/mo</span></div>
+        <div class="line"><span><strong>Total</strong></span><span class="cost">~$92/mo</span></div>
+      </div>
+      <div class="compare-card good">
+        <h4>With Gnexoai</h4>
+        <div class="line"><span>Every AI tool above</span><span class="cost">Included</span></div>
+        <div class="line"><span>One login, one workspace</span><span class="cost">Included</span></div>
+        <div class="line"><span>Shared file & project library</span><span class="cost">Included</span></div>
+        <div class="line"><span>One bill, one plan</span><span class="cost">Included</span></div>
+        <div class="line"><span><strong>Gnexoai Pro</strong></span><span class="cost">$34/mo</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="pricing">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow"><span class="sparkle"></span>Subscriptions</div>
+      <h2>Simple pricing, for everyone.</h2>
+      <p>Switch or cancel anytime. Annual billing saves you roughly two months a year.</p>
+    </div>
+
+    <div class="toggle-row">
+      <div class="toggle">
+        <button class="active" id="btn-monthly" onclick="setBilling('monthly')">Monthly</button>
+        <button id="btn-annual" onclick="setBilling('annual')">Annual</button>
+      </div>
+      <span class="save-note">Save ~20% with annual</span>
+    </div>
+
+    <div class="plan-grid">
+      <div class="plan">
+        <h3>Spark</h3>
+        <div class="who">For trying Gnexoai out</div>
+        <div class="price"><span class="amt">$0</span><span class="per">/mo</span></div>
+        <div class="billed">Free, forever</div>
+        <ul>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>150 AI credits a month</li>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>Chat, writing & basic image tools</li>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>1 workspace, personal use</li>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>Community support</li>
+        </ul>
+        <a href="#" class="btn btn-outline">Get started</a>
+      </div>
+
+      <div class="plan">
+        <h3>Creator</h3>
+        <div class="who">Students, influencers & personal projects</div>
+        <div class="price"><span class="amt" data-monthly="$14" data-annual="$11">$14</span><span class="per">/mo</span></div>
+        <div class="billed" data-monthly="Billed monthly" data-annual="Billed annually · $132/yr">Billed monthly</div>
+        <ul>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>2,000 AI credits a month</li>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>All writing, image & voice tools</li>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>Video generation (standard queue)</li>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>Priority response speed</li>
+        </ul>
+        <a href="#" class="btn btn-outline">Start free trial</a>
+      </div>
+
+      <div class="plan feat">
+        <h3>Pro</h3>
+        <div class="who">Entrepreneurs, teachers & power users</div>
+        <div class="price"><span class="amt" data-monthly="$34" data-annual="$27">$34</span><span class="per">/mo</span></div>
+        <div class="billed" data-monthly="Billed monthly" data-annual="Billed annually · $324/yr">Billed monthly</div>
+        <ul>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>Unlimited standard-model usage</li>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>Premium model access, all categories</li>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>Brand & voice presets</li>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>Priority support + early features</li>
+        </ul>
+        <a href="#" class="btn btn-primary">Start free trial</a>
+      </div>
+
+      <div class="plan">
+        <h3>Team</h3>
+        <div class="who">Business, classrooms & agencies</div>
+        <div class="price"><span class="amt" data-monthly="$89" data-annual="$71">$89</span><span class="per">/5 seats /mo</span></div>
+        <div class="billed" data-monthly="Billed monthly" data-annual="Billed annually">Billed monthly</div>
+        <ul>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>Everything in Pro, per seat</li>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>Shared workspace & asset library</li>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>Admin controls & usage reporting</li>
+          <li><span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>Dedicated onboarding</li>
+        </ul>
+        <a href="#" class="btn btn-outline">Talk to us</a>
+      </div>
+    </div>
+
+    <div class="edu-note"><strong>Students & teachers:</strong> get 30% off Creator or Pro with a valid school email — verify anytime from account settings.</div>
+  </div>
+</section>
+
+<section class="faq" id="faq">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow"><span class="sparkle"></span>Questions</div>
+      <h2>Frequently asked questions</h2>
+    </div>
+    <div class="faq-list">
+      <details open>
+        <summary>What exactly is included in Gnexoai?</summary>
+        <p>Every plan includes access to writing & chat, image generation, video, voice, code, data & research, automation, and translation tools — all inside one workspace with one login.</p>
+      </details>
+      <details>
+        <summary>Can I switch plans later?</summary>
+        <p>Yes. You can upgrade, downgrade, or cancel at any time from your account settings — changes apply from your next billing cycle.</p>
+      </details>
+      <details>
+        <summary>Is there really a free plan?</summary>
+        <p>Yes — Spark is free forever, with monthly credits across our core writing and image tools. No credit card required to start.</p>
+      </details>
+      <details>
+        <summary>How does the student & teacher discount work?</summary>
+        <p>Verify a valid school email address in your account settings to get 30% off the Creator or Pro plan, for as long as you're enrolled or teaching.</p>
+      </details>
+      <details>
+        <summary>Can my whole team use one Gnexoai account?</summary>
+        <p>The Team plan is built for that — it includes shared workspaces, per-seat billing, and admin controls to manage everyone in one place.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="final-cta">
+    <h2>Stop paying for six AIs.<br>Start with one.</h2>
+    <p>Gnexoai is free to start, and every plan scales with what you're building.</p>
+    <a href="#pricing" class="btn btn-primary">Get started free</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-top">
+      <div>
+        <h3>Get one email a month, not six AI tabs.</h3>
+        <p>New tools, feature drops, and tips for getting more out of Gnexoai — no spam, unsubscribe anytime.</p>
+      </div>
+      <div class="newsletter">
+        <input type="email" placeholder="you@email.com" aria-label="Email address">
+        <button class="btn btn-primary">Subscribe</button>
+      </div>
+    </div>
+
+    <div class="foot-grid">
+      <div>
+        <h4>Product</h4>
+        <a href="#capabilities">What we do</a>
+        <a href="#segments">Who it's for</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#faq">FAQ</a>
+      </div>
+      <div>
+        <h4>Solutions</h4>
+        <a href="#segments">For students</a>
+        <a href="#segments">For teachers</a>
+        <a href="#segments">For business</a>
+        <a href="#segments">For creators</a>
+      </div>
+      <div>
+        <h4>Company</h4>
+        <a href="#">About</a>
+        <a href="#">Careers</a>
+        <a href="#">Press</a>
+        <a href="#">Contact</a>
+      </div>
+      <div>
+        <h4>Resources</h4>
+        <a href="#">Help center</a>
+        <a href="#">Community</a>
+        <a href="#">Status</a>
+        <a href="#">API docs</a>
+      </div>
+    </div>
+
+    <div class="foot-bottom">
+      <div class="foot-legal">
+        <span>© 2026 Gnexoai. All rights reserved.</span>
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+        <a href="#">Cookie preferences</a>
+      </div>
+      <div class="foot-right">
+        <select class="region-select" aria-label="Region and language">
+          <option>English (US)</option>
+          <option>English (UK)</option>
+          <option>Español</option>
+          <option>Français</option>
+        </select>
+        <div class="social-row">
+          <a href="#" aria-label="X"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M4 4l16 16M20 4L4 20"/></svg></a>
+          <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></a>
+          <a href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><line x1="7" y1="10" x2="7" y2="16"/><circle cx="7" cy="7" r="0.5" fill="#fff"/><path d="M11 16v-4a2 2 0 0 1 4 0v4"/><line x1="11" y1="10" x2="11" y2="16"/></svg></a>
+          <a href="#" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="4"/><polygon points="10 9 15 12 10 15" fill="#fff" stroke="none"/></svg></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<button class="back-top" id="backTop" aria-label="Back to top">↑</button>
+
+<script>
+  function setBilling(mode){
+    document.getElementById('btn-monthly').classList.toggle('active', mode==='monthly');
+    document.getElementById('btn-annual').classList.toggle('active', mode==='annual');
+    document.querySelectorAll('[data-monthly]').forEach(el=>{
+      const key = mode==='monthly' ? 'monthly' : 'annual';
+      el.textContent = el.dataset[key];
+    });
+  }
+
+  const burger = document.getElementById('burger');
+  const panel = document.getElementById('mobilePanel');
+  burger.addEventListener('click', () => {
+    const open = panel.classList.toggle('open');
+    burger.classList.toggle('open', open);
+    burger.setAttribute('aria-expanded', open);
+  });
+  panel.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    panel.classList.remove('open');
+    burger.classList.remove('open');
+    burger.setAttribute('aria-expanded', 'false');
+  }));
+
+  const backTop = document.getElementById('backTop');
+  window.addEventListener('scroll', () => {
+    backTop.classList.toggle('show', window.scrollY > 600);
+  });
+  backTop.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
+</script>
+
+</body>
+</html>
